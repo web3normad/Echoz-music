@@ -1,0 +1,20 @@
+{
+    "name": "Summer Breeze",
+    "description": "DJ Cool - Summer anthem with tropical vibes",
+    "image": "https://ipfs.io/ipfs/QmQg2C8coZnA19GMYogJ9eBUjkRJeyJ8BjJhPYTU7qjBiY",
+    "animation_url": "https://ipfs.io/ipfs/QmfJaLSzpoXcNxyVKUpVQV2WdWVkdUm4ySUJsjmp1YLFgy",
+    "attributes": [
+        {
+            "trait_type": "Artist",
+            "value": "DJ Cool"
+        },
+        {
+            "trait_type": "Genre",
+            "value": "Electronic Pop"
+        }
+    ],
+    "royaltyPercentage": 10
+}
+
+
+

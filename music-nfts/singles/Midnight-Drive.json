@@ -1,0 +1,21 @@
+{
+    "name": "Midnight Drive",
+    "description": "DJ Cool - Late night cruise music",
+    "image": "https://ipfs.io/ipfs/QmUXWrXHVvJLBBMSdtuDbDghrnbaZZXjXGUund95j5v8pa",
+    "animation_url": "https://ipfs.io/ipfs/QmWaXVmyUPvc1m5rhWX9eYDmB7CZBPBga4Y8yqMLicM1AV",
+    "attributes": [
+        {
+            "trait_type": "Artist",
+            "value": "DJ Cool"
+        },
+        {
+            "trait_type": "Genre",
+            "value": "Lo-fi"
+        }
+    ],
+    "royaltyPercentage": 10
+}
+
+
+
+
