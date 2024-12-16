@@ -1,82 +1,39 @@
-import React, { useState } from 'react';
-import { 
-  FaPlay, 
-  FaPause, 
-  FaHeart, 
-  FaRegHeart, 
-  FaLock 
-} from 'react-icons/fa';
-import { 
-  ChevronLeft, 
-  ChevronRight, 
-  ChevronUp, 
-  ChevronDown 
-} from 'lucide-react';
+import React, { useState } from "react";
+import { FaPlay, FaPause } from "react-icons/fa";
+import { BsThreeDots } from "react-icons/bs";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import { useContractRead} from "wagmi";
+import StreamingPlatformABI from "../../ABI/MusicPlatform.json";
 
-const MusicStreamingPage = () => {
+// Replace with your contract address
+const STREAMING_PLATFORM_ADDRESS = "0xbb9Ae81c1A4d3Dac663593B798Fd3e2aF38AEb87";
+
+const MusicStreamPage = () => {
   const [currentTrack, setCurrentTrack] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [activeGenre, setActiveGenre] = useState('All Releases');
-  const [userSubscriptionTier, setUserSubscriptionTier] = useState('Basic');
 
-  const genres = [
-    'All Releases', 'Pop', 'Hip Hop', 'Rock', 'R&B', 'Electronic', 'Classical'
+  // Contract setup with Wagmi
+  const { data: streamRateConfig, isLoading: isConfigLoading } = useContractRead({
+    address: STREAMING_PLATFORM_ADDRESS,
+    abi: StreamingPlatformABI,
+    functionName: "globalStreamRateConfig",
+  });
+
+  const topCharts = [
+    { id: 1, title: "AI Music Genre", artist: "Various Artists", image: "/ai-music.jpg" },
+    { id: 2, title: "Pop", artist: "Various Artists", image: "/pop.jpg" },
+    { id: 3, title: "Hip Hop", artist: "Various Artists", image: "/hiphop.jpg" },
+    { id: 4, title: "Rock", artist: "Various Artists", image: "/rock.jpg" },
+    { id: 5, title: "R&B Soul", artist: "Various Artists", image: "/rnb.jpg" },
+    { id: 6, title: "Country", artist: "Various Artists", image: "/country.jpg" },
   ];
 
-  const musicReleases = [
-    {
-      id: 1,
-      title: 'Sunset Memories',
-      artist: 'Luna Eclipse',
-      album: 'Twilight Echoes',
-      genre: 'Pop',
-      streamCount: 1250000,
-      revenue: 62500,
-      duration: '3:45',
-      image: '/sunset-memories.jpg',
-      isExclusive: false
-    },
-    {
-      id: 2,
-      title: 'Quantum Groove',
-      artist: 'Cyber Rhythm',
-      album: 'Digital Waves',
-      genre: 'Electronic',
-      streamCount: 875000,
-      revenue: 43750,
-      duration: '4:12',
-      image: '/quantum-groove.jpg',
-      isExclusive: true
-    },
-    {
-      id: 3,
-      title: 'Urban Symphony',
-      artist: 'Street Poets',
-      album: 'City Lights',
-      genre: 'Hip Hop',
-      streamCount: 1500000,
-      revenue: 75000,
-      duration: '3:30',
-      image: '/urban-symphony.jpg',
-      isExclusive: false
-    },
-    {
-      id: 4,
-      title: 'Whispers of Time',
-      artist: 'Acoustic Realm',
-      album: 'Ethereal Moments',
-      genre: 'Classical',
-      streamCount: 450000,
-      revenue: 22500,
-      duration: '5:15',
-      image: '/whispers-of-time.jpg',
-      isExclusive: true
-    }
+  const listeningHistory = [
+    { id: 1, title: "She Will Be Loved", artist: "Maroon 5", streams: "120k" },
+    { id: 2, title: "Dumb Little Bug", artist: "Em Beihold", streams: "110k" },
+    { id: 3, title: "It Would Be You", artist: "Ben Hector", streams: "98k" },
   ];
-
-  const filteredReleases = activeGenre === 'All Releases' 
-    ? musicReleases 
-    : musicReleases.filter(release => release.genre === activeGenre);
 
   const handlePlayPause = (track) => {
     if (currentTrack?.id === track.id) {
@@ -87,136 +44,80 @@ const MusicStreamingPage = () => {
     }
   };
 
-  const canPlayTrack = (track) => {
-    if (!track.isExclusive) return true;
-    
-    const tierAccess = {
-      'Free': false,
-      'Basic': false,
-      'Premium': true,
-      'Ultimate': true
-    };
-
-    return tierAccess[userSubscriptionTier];
-  };
-
   return (
-    <div className="h-screen w-full pt-5 overflow-hidden flex flex-col">
-      {/* Genre Filter Section */}
-      <section className="px-6 mb-6">
-        <div className="bg-white dark:bg-[#252727] rounded-lg shadow-lg p-4">
-          <div className="flex items-center justify-between">
-            <div className="flex space-x-4">
-              {genres.map((genre) => (
-                <button
-                  key={genre}
-                  onClick={() => setActiveGenre(genre)}
-                  className={`
-                    px-4 py-2 rounded-lg transition-all
-                    ${activeGenre === genre 
-                      ? 'bg-[#04e3cb] text-white' 
-                      : 'bg-gray-200 dark:bg-[#0F0F0F] text-gray-600 dark:text-white hover:bg-gray-300 dark:hover:bg-[#1F1F1F]'}
-                  `}
-                >
-                  {genre}
-                </button>
-              ))}
-            </div>
-            <div className="flex space-x-2">
-              <button className="w-8 h-8 flex items-center justify-center bg-gray-200 dark:bg-[#0F0F0F] rounded-full text-gray-500 hover:bg-gray-300">
-                <ChevronLeft size={20} />
-              </button>
-              <button className="w-8 h-8 flex items-center justify-center bg-gray-200 dark:bg-[#0F0F0F] rounded-full text-gray-500 hover:bg-gray-300">
-                <ChevronRight size={20} />
-              </button>
-            </div>
-          </div>
-        </div>
+    <div className="bg-gray-100 dark:bg-[#252727] min-h-screen text-gray-800 dark:text-white p-6">
+      {/* Top Charts Section */}
+      <section>
+        <h2 className="text-2xl font-bold mb-4">Top 50</h2>
+        <Swiper spaceBetween={16} slidesPerView="auto" className="overflow-x-auto scrollbar-hide">
+          {topCharts.map((chart) => (
+            <SwiperSlide key={chart.id} className="w-[180px]">
+              <div className="rounded-2xl overflow-hidden">
+                <img src={chart.image} alt={chart.title} className="w-full h-32 object-cover" />
+                <div className="bg-white dark:bg-[#333] p-4">
+                  <h3 className="font-semibold text-sm">{chart.title}</h3>
+                  <p className="text-xs text-gray-500 dark:text-gray-300">{chart.artist}</p>
+                </div>
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
       </section>
 
-      {/* Music Releases Section */}
-      <section className="px-6 flex-1 overflow-y-auto">
-        <div className="grid grid-cols-1 gap-6">
-          {filteredReleases.map((release) => (
-            <div 
-              key={release.id}
-              className="
-                flex items-center justify-between 
-                bg-white dark:bg-[#252727] 
-                rounded-lg shadow-lg p-6
-                hover:shadow-xl transition-all
-              "
+      {/* Listening History */}
+      <section className="mt-8">
+        <h2 className="text-2xl font-bold mb-4">Listening History</h2>
+        <div className="bg-white dark:bg-[#333] rounded-2xl overflow-hidden">
+          <div className="grid grid-cols-3 p-4 font-bold text-gray-600 dark:text-gray-300 border-b">
+            <div>Title</div>
+            <div>Artist</div>
+            <div>Streams</div>
+          </div>
+          {listeningHistory.map((track) => (
+            <div
+              key={track.id}
+              className="grid grid-cols-3 items-center p-4 border-t hover:bg-gray-100 dark:hover:bg-[#444]"
             >
-              <div className="flex items-center space-x-6 w-1/3">
-                <div 
-                  className="w-16 h-16 bg-cover bg-center rounded-md"
-                  style={{ backgroundImage: `url(${release.image})` }}
-                />
-                <div>
-                  <h3 className="font-bold text-[#04e3cb]">{release.title}</h3>
-                  <p className="text-sm text-gray-500 dark:text-white">{release.artist}</p>
-                </div>
-              </div>
-
-              <div className="w-1/3 text-center">
-                <p className="text-sm text-gray-500 dark:text-white">{release.album} | {release.genre}</p>
-              </div>
-
-              <div className="w-1/3 flex items-center justify-end space-x-6">
-                <div className="text-right">
-                  <p className="text-sm text-gray-500">{release.streamCount.toLocaleString()} Streams</p>
-                  <p className="text-sm text-[#04e3cb]">${release.revenue.toLocaleString()}</p>
-                </div>
-                <div className="flex items-center space-x-3">
-                  {canPlayTrack(release) ? (
-                    <button 
-                      onClick={() => handlePlayPause(release)}
-                      className={`
-                        w-10 h-10 rounded-full flex items-center justify-center
-                        ${currentTrack?.id === release.id && isPlaying
-                          ? 'bg-[#04e3cb] text-white'
-                          : 'bg-gray-200 dark:bg-[#0F0F0F] text-gray-600 dark:text-white'}
-                      `}
-                    >
-                      {currentTrack?.id === release.id && isPlaying ? <FaPause /> : <FaPlay />}
-                    </button>
-                  ) : (
-                    <button 
-                      className="w-10 h-10 rounded-full flex items-center justify-center bg-gray-200 dark:bg-[#0F0F0F] text-gray-400"
-                      title="Upgrade subscription to play"
-                    >
-                      <FaLock />
-                    </button>
-                  )}
-                  <button className="text-[#04e3cb] hover:text-red-500">
-                    <FaRegHeart />
-                  </button>
-                </div>
+              <div>{track.title}</div>
+              <div>{track.artist}</div>
+              <div className="flex items-center justify-between">
+                <span>{track.streams}</span>
+                <button
+                  onClick={() => handlePlayPause(track)}
+                  className="text-[#04e3cb] hover:text-[#02b39c]"
+                >
+                  {currentTrack?.id === track.id && isPlaying ? <FaPause /> : <FaPlay />}
+                </button>
               </div>
             </div>
           ))}
         </div>
+        
       </section>
 
-      {/* Now Playing Section */}
+      {/* Now Playing */}
       {currentTrack && (
-        <section className="fixed bottom-0 left-0 right-0 bg-white dark:bg-[#252727] shadow-2xl p-4">
-          <div className="flex items-center justify-between px-6">
+        <section className="fixed bottom-0 left-0 right-0 bg-white dark:bg-[#333] p-4 shadow-2xl">
+          <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div 
-                className="w-12 h-12 bg-cover bg-center rounded-md"
-                style={{ backgroundImage: `url(${currentTrack.image})` }}
+              <img
+                src={currentTrack.image || "/default-cover.jpg"}
+                alt={currentTrack.title}
+                className="w-16 h-16 rounded-lg object-cover"
               />
               <div>
-                <h4 className="font-bold text-[#04e3cb]">{currentTrack.title}</h4>
-                <p className="text-sm text-gray-500 dark:text-white">{currentTrack.artist}</p>
+                <h4 className="font-bold">{currentTrack.title}</h4>
+                <p className="text-sm text-gray-500 dark:text-gray-300">{currentTrack.artist}</p>
               </div>
             </div>
-            <div className="flex items-center space-x-4">
-              <button onClick={() => setIsPlaying(!isPlaying)}>
-                {isPlaying ? <FaPause className="text-[#04e3cb]" /> : <FaPlay className="text-[#04e3cb]" />}
+            <div className="flex space-x-4 items-center">
+              <button
+                onClick={() => setIsPlaying(!isPlaying)}
+                className="text-[#04e3cb] hover:text-[#02b39c]"
+              >
+                {isPlaying ? <FaPause size={24} /> : <FaPlay size={24} />}
               </button>
-              <p className="text-sm text-gray-500">{currentTrack.duration}</p>
+              <BsThreeDots size={20} className="text-gray-600 dark:text-gray-300 cursor-pointer" />
             </div>
           </div>
         </section>
@@ -225,4 +126,4 @@ const MusicStreamingPage = () => {
   );
 };
 
-export default MusicStreamingPage;
+export default MusicStreamPage;

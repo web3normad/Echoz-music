@@ -1,14 +1,18 @@
-import React, { useState, useRef } from "react";
+no nau this is my current upload music code "import React, { useState, useRef } from "react";
 import { UploadCloud, Image as ImageIcon } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
+import { WagmiProvider, useAccount, useWriteContract, useContractWrite } from "wagmi";
+import { ethers } from "ethers";
 import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import 'react-toastify/dist/ReactToastify.css';
 
 // ABI imports
 import MusicNFTContractABI from "../../ABI/MusicNFT.json";
+import ThamaniStreamingPlatformABI from "../../ABI/MusicPlatform.json";
 
 // Contract Addresses
 const MUSIC_NFT_CONTRACT_ADDRESS = "0x4Bd7993903cb7c69A6037cb4587DDAa709C1d716";
+const THAMANI_STREAMING_PLATFORM_ADDRESS = "0xbb9Ae81c1A4d3Dac663593B798Fd3e2aF38AEb87";
 
 const UploadMusic = () => {
   const [newRelease, setNewRelease] = useState({
@@ -27,99 +31,93 @@ const UploadMusic = () => {
   const songFileInputRef = useRef(null);
   const albumCoverInputRef = useRef(null);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setNewRelease((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+  // Updated mutation implementation for React Query v5
+  const uploadToPinata = async (file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("pinataMetadata", JSON.stringify({ name: file.name }));
+    formData.append("pinataOptions", JSON.stringify({ cidVersion: 0 }));
+
+    const JWT = import.meta.env.VITE_PINATA_JWT;
+    const response = await fetch("https://api.pinata.cloud/pinning/pinFileToIPFS", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${JWT}`,
+      },
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(`Failed to upload file to Pinata: ${errorData.message}`);
+    }
+
+    const result = await response.json();
+    return `https://gateway.pinata.cloud/ipfs/${result.IpfsHash}`;
   };
 
-  const handleInvestorToggle = (e) => {
-    const { checked } = e.target;
-    setNewRelease((prev) => ({
-      ...prev,
-      hasInvestors: checked,
-      investorPercentage: checked ? prev.investorPercentage : "",
+  const pinataUploadMutation = useMutation({
+    mutationFn: uploadToPinata,
+    onError: (error) => {
+      console.error(error);
+      toast.error(`Failed to upload file: ${error.message}`);
+      setIsUploading(false);
+    },
+    onSuccess: (data, variables) => {
+      // Determine if it's song or cover based on the file type
+      if (variables.type === 'song') {
+        setIpfsUrls(prevState => ({ ...prevState, songUrl: data }));
+      } else {
+        setIpfsUrls(prevState => ({ ...prevState, coverUrl: data }));
+      }
+    },
+  });
+
+  const { config } = useWriteContract({
+    address: MUSIC_NFT_CONTRACT_ADDRESS,
+    abi: MusicNFTContractABI,
+    functionName: "createMusicRights",
+    args: [
+      newRelease.title,
+      ipfsUrls.songUrl,
+      newRelease.hasInvestors ? Math.round(parseFloat(newRelease.investorPercentage) * 100) : 0,
+      ethers.utils.parseUnits("0.01", "ether"),
+      true,
+      ethers.utils.parseUnits("1", "ether"),
+    ],
+    enabled: !!ipfsUrls.songUrl && !!ipfsUrls.coverUrl,
+  });
+
+  const { write } = useContractWrite(config);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewRelease((prevState) => ({
+      ...prevState,
+      [name]: value,
     }));
   };
 
   const handleFileChange = (e) => {
     const { name, files } = e.target;
-    setNewRelease((prev) => ({
-      ...prev,
+    setNewRelease((prevState) => ({
+      ...prevState,
       [name]: files[0],
     }));
   };
 
-  const uploadToPinata = async ({ file, type }) => {
-    try {
-      if (!file || !(file instanceof File)) {
-        throw new Error("Invalid file passed to uploadToPinata");
-      }
-  
-      const formData = new FormData();
-      formData.append("file", file);
-  
-      const metadata = JSON.stringify({
-        name: type === "song" ? "Uploaded Song" : "Album Cover",
-        keyvalues: {
-          type: type,
-        },
-      });
-  
-      formData.append("pinataMetadata", metadata);
-  
-      const options = JSON.stringify({
-        cidVersion: 1,
-      });
-  
-      formData.append("pinataOptions", options);
-  
-      // Pinata API URL
-      const response = await fetch("https://api.pinata.cloud/pinning/pinFileToIPFS", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${import.meta.env.VITE_PINATA_JWT}`, // Use your environment variable
-        },
-        body: formData,
-      });
-  
-      if (!response.ok) {
-        const error = await response.json();
-        console.error("Pinata API Error:", error);
-        throw new Error(`Failed to upload ${type} to Pinata`);
-      }
-  
-      const result = await response.json();
-      console.log(`${type} upload result:`, result);
-      return result.IpfsHash; // Return the IPFS hash
-    } catch (error) {
-      console.error(`Error uploading ${type}:`, error);
-      throw error;
-    }
+  const handleInvestorToggle = (e) => {
+    setNewRelease((prevState) => ({
+      ...prevState,
+      hasInvestors: e.target.checked,
+      investorPercentage: e.target.checked ? prevState.investorPercentage : "",
+    }));
   };
-  
-  const pinataUploadMutation = useMutation({
-    mutationFn: uploadToPinata,
-    onError: (error) => {
-      toast.error(error.message);
-      setIsUploading(false);
-    },
-    onSuccess: (data, variables) => {
-      if (variables.type === "song") {
-        setIpfsUrls((prev) => ({ ...prev, songUrl: data }));
-      } else if (variables.type === "cover") {
-        setIpfsUrls((prev) => ({ ...prev, coverUrl: data }));
-      }
-    },
-  });
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     setIsUploading(true);
-  
-    // Validate required fields
+
     if (
       !newRelease.title ||
       !newRelease.artist ||
@@ -132,27 +130,20 @@ const UploadMusic = () => {
       setIsUploading(false);
       return;
     }
-  
+
     try {
-      console.log("Uploading Song File:", newRelease.songFile);
-      console.log("Uploading Album Cover:", newRelease.albumCover);
-  
-      // Upload the song file
-      const songFileURL = await pinataUploadMutation.mutateAsync({
-        file: newRelease.songFile,
-        type: "song",
-      });
-  
-      // Upload the album cover
-      const albumCoverURL = await pinataUploadMutation.mutateAsync({
-        file: newRelease.albumCover,
-        type: "cover",
-      });
-  
-      toast.success("Files uploaded successfully to Pinata!");
-      console.log("Song File URL:", songFileURL);
-      console.log("Album Cover URL:", albumCoverURL);
-  
+      // Add type property to files for correct handling in mutation
+      const songFile = { ...newRelease.songFile, type: 'song' };
+      const coverFile = { ...newRelease.albumCover, type: 'cover' };
+
+      const songUrl = await pinataUploadMutation.mutateAsync(songFile);
+      const coverUrl = await pinataUploadMutation.mutateAsync(coverFile);
+
+      setIpfsUrls({ songUrl, coverUrl });
+
+      write?.();
+      toast.success("Music rights successfully created on blockchain!");
+
       // Reset the form
       setNewRelease({
         title: "",
@@ -164,21 +155,22 @@ const UploadMusic = () => {
         hasInvestors: false,
         investorPercentage: "",
       });
-  
-      // Clear file input fields
+
+      // Manually reset file inputs
       songFileInputRef.current.value = null;
       albumCoverInputRef.current.value = null;
     } catch (error) {
       console.error(error);
-      toast.error("File upload failed!");
+      toast.error(`Failed to create music rights: ${error.message}`);
     } finally {
       setIsUploading(false);
     }
   };
-  
+
   const triggerFileInput = (inputRef) => {
     inputRef.current.click();
   };
+
   return (
     <div className="min-h-screen flex items-center justify-center p-6">
       <ToastContainer />
@@ -187,7 +179,6 @@ const UploadMusic = () => {
           Upload Your Music
         </h3>
         <form className="space-y-6" onSubmit={handleFormSubmit}>
-          {/* Form Inputs for Song Title, Artist Name, Year, Genre */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
@@ -251,9 +242,7 @@ const UploadMusic = () => {
                 <option value="Electronic">Electronic</option>
               </select>
             </div>
-          
           </div>
-          {/* File upload for song and album cover */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
@@ -298,7 +287,6 @@ const UploadMusic = () => {
               </button>
             </div>
           </div>
-          {/* Investor share logic */}
           <div className="flex items-center">
             <input
               type="checkbox"
@@ -334,4 +322,4 @@ const UploadMusic = () => {
   );
 };
 
-export default UploadMusic;
+export default UploadMusic;"
