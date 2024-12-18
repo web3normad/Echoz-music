@@ -11,14 +11,15 @@ import {
   LogOut,
 } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
+import Logo from "../assets/images/Logo.png"
 
 const Sidebar = () => {
   const location = useLocation();
 
   // Menu items configuration
   const menuItems = [
-    { label: 'Home', icon: Home, link: '/' },
-    { label: 'Search', icon: Search, link: '/search' },
+    { label: 'Streaming', icon: Home, link: '/' },
+    { label: 'Explore Music', icon: Search, link: '/explore-music' },
     { label: 'Likes', icon: Heart, link: '/likes' },
     { label: 'Playlists', icon: ListMusic, link: '/playlists' },
     { label: 'Albums', icon: Album, link: '/albums' },
@@ -34,8 +35,8 @@ const Sidebar = () => {
   return (
     <div className="bg-white dark:bg-[#252727] dark:text-white dark:border-r border-r-slate-400 shadow-lg h-screen w-72">
       {/* Sidebar Header */}
-      <div className="flex items-center justify-center p-4 border-b">
-        <h1 className="text-2xl font-bold text-[#04e3cb]">Quiimo</h1>
+      <div className="flex items-center justify-center px-4  border-b">
+        <img src={Logo} alt="Quiimo Logo" className='w-40'/>
       </div>
 
       {/* Main Menu */}
@@ -88,7 +89,7 @@ const MenuItem = ({ icon: Icon, label, link, isActive, isNew }) => {
   return (
     <li
       className={`relative flex items-center px-4 py-2 cursor-pointer group ${
-        isActive ? 'bg-[#dcfffb] dark:text-gray-800' : 'hover:bg-gray-100'
+        isActive ? 'bg-[#dcfffb] dark:text-gray-800' : 'hover:bg-gray-100 hover:text-gray-700'
       }`}
     >
       {isActive && (

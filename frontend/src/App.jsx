@@ -42,7 +42,7 @@ const liskSepoliaNetwork = {
   blockExplorerUrls: ['https://sepolia-explorer.lisk.com/'],
   chainId: 4202,
   chainName: 'Lisk Sepolia Testnet',
-  iconUrls: [], // You might want to add an icon URL if available
+  iconUrls: [], 
   name: 'Lisk Sepolia',
   nativeCurrency: {
     decimals: 18,
@@ -58,11 +58,11 @@ const liskSepoliaNetwork = {
 // Query Client and Wagmi Config
 const queryClient = new QueryClient();
 const config = createConfig({
-  chains: [mainnet], // You can add Lisk Sepolia here as well if needed
+  chains: [mainnet],
   multiInjectedProviderDiscovery: false,
   transports: {
     [mainnet.id]: http(),
-    [4202]: http('https://rpc.sepolia-api.lisk.com'), // Add Lisk Sepolia transport
+    [4202]: http('https://rpc.sepolia-api.lisk.com'), 
   },
 });
 
@@ -93,6 +93,7 @@ export default function App() {
                   <main className="p-4 bg-gray-50 dark:bg-[#0F0F0F] overflow-y-hidden">
                     <Routes>
                       <Route path="/" element={<MusicDashboard />} />
+                      <Route path="/stream-music" element={<MusicDashboard />} />
                       <Route path="/search" element={<Search />} />
                       <Route path="/likes" element={<Likes />} />
                       <Route path="/playlists" element={<Playlists />} />
@@ -117,7 +118,6 @@ export default function App() {
               </div>
             </Router>
             </ThemeProvider>
-            <DynamicWidget />
           </DynamicWagmiConnector>
         </QueryClientProvider>
       </WagmiProvider>

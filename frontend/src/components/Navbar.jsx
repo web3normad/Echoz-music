@@ -74,7 +74,7 @@ const Navbar = () => {
               />
               <div className="flex flex-col items-start flex-grow">
                 <span className="font-semibold">
-                  {user?.name || "Web3Nomad"}
+                  {user?.name || "Jason"}
                 </span>
                 <span className="text-gray-500 text-sm">
                   {truncateWalletAddress(primaryWallet.address)}
@@ -95,7 +95,7 @@ const Navbar = () => {
               >
                 <div className="py-1">
                   <NavLink
-                    to="/artist-dashboard"
+                    to="/artist"
                     className={({ isActive }) =>
                       `flex items-center w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-zinc-700 transition-colors ${
                         isActive ? "bg-gray-100 dark:bg-zinc-700" : ""
@@ -128,13 +128,13 @@ const Navbar = () => {
                     Investor
                   </NavLink>
                   <div className="border-t dark:border-zinc-700 my-1"></div>
-                  <button
+                  {/* <button
                     onClick={() => disconnectWallet()}
                     className="flex items-center w-full px-4 py-2 text-left text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
                   >
                     <LogOut className="mr-3 w-4 h-4" />
                     Logout
-                  </button>
+                  </button> */}
                 </div>
               </div>
             )}

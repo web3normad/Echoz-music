@@ -1,19 +1,111 @@
 [
     {
+        "inputs": [],
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+    },
+    {
         "inputs": [
             {
                 "internalType": "address",
-                "name": "_musicNFTAddress",
+                "name": "sender",
                 "type": "address"
             },
             {
+                "internalType": "uint256",
+                "name": "tokenId",
+                "type": "uint256"
+            },
+            {
                 "internalType": "address",
-                "name": "_platformTokenAddress",
+                "name": "owner",
                 "type": "address"
             }
         ],
-        "stateMutability": "nonpayable",
-        "type": "constructor"
+        "name": "ERC721IncorrectOwner",
+        "type": "error"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "operator",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "tokenId",
+                "type": "uint256"
+            }
+        ],
+        "name": "ERC721InsufficientApproval",
+        "type": "error"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "approver",
+                "type": "address"
+            }
+        ],
+        "name": "ERC721InvalidApprover",
+        "type": "error"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "operator",
+                "type": "address"
+            }
+        ],
+        "name": "ERC721InvalidOperator",
+        "type": "error"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "owner",
+                "type": "address"
+            }
+        ],
+        "name": "ERC721InvalidOwner",
+        "type": "error"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "receiver",
+                "type": "address"
+            }
+        ],
+        "name": "ERC721InvalidReceiver",
+        "type": "error"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "sender",
+                "type": "address"
+            }
+        ],
+        "name": "ERC721InvalidSender",
+        "type": "error"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "tokenId",
+                "type": "uint256"
+            }
+        ],
+        "name": "ERC721NonexistentToken",
+        "type": "error"
     },
     {
         "inputs": [
@@ -38,123 +130,85 @@
         "type": "error"
     },
     {
-        "inputs": [],
-        "name": "ReentrancyGuardReentrantCall",
-        "type": "error"
-    },
-    {
-        "anonymous": false,
-        "inputs": [
-            {
-                "components": [
-                    {
-                        "internalType": "uint256",
-                        "name": "baseStreamRate",
-                        "type": "uint256"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "subscriptionMultiplier",
-                        "type": "uint256"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "qualityMultiplier",
-                        "type": "uint256"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "listenerLocationMultiplier",
-                        "type": "uint256"
-                    }
-                ],
-                "indexed": false,
-                "internalType": "struct ThamaniStreamingPlatform.StreamRevenueConfig",
-                "name": "newConfig",
-                "type": "tuple"
-            }
-        ],
-        "name": "GlobalStreamRateConfigUpdated",
-        "type": "event"
-    },
-    {
-        "anonymous": false,
-        "inputs": [
-            {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "firstPlaceReward",
-                "type": "uint256"
-            },
-            {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "secondPlaceReward",
-                "type": "uint256"
-            },
-            {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "thirdPlaceReward",
-                "type": "uint256"
-            },
-            {
-                "indexed": false,
-                "internalType": "bool",
-                "name": "isEnabled",
-                "type": "bool"
-            }
-        ],
-        "name": "ListenerRewardsConfigUpdated",
-        "type": "event"
-    },
-    {
         "anonymous": false,
         "inputs": [
             {
                 "indexed": true,
-                "internalType": "uint256",
-                "name": "musicId",
-                "type": "uint256"
+                "internalType": "address",
+                "name": "owner",
+                "type": "address"
             },
             {
                 "indexed": true,
                 "internalType": "address",
-                "name": "artist",
+                "name": "approved",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "internalType": "uint256",
+                "name": "tokenId",
+                "type": "uint256"
+            }
+        ],
+        "name": "Approval",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "owner",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "operator",
                 "type": "address"
             },
             {
                 "indexed": false,
-                "internalType": "string",
-                "name": "title",
-                "type": "string"
-            },
-            {
-                "indexed": false,
-                "internalType": "string",
-                "name": "genre",
-                "type": "string"
-            },
-            {
-                "indexed": false,
-                "internalType": "string",
-                "name": "ipfsHash",
-                "type": "string"
-            },
+                "internalType": "bool",
+                "name": "approved",
+                "type": "bool"
+            }
+        ],
+        "name": "ApprovalForAll",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
             {
                 "indexed": false,
                 "internalType": "uint256",
-                "name": "totalShares",
+                "name": "_fromTokenId",
                 "type": "uint256"
             },
             {
                 "indexed": false,
                 "internalType": "uint256",
-                "name": "sharePrice",
+                "name": "_toTokenId",
                 "type": "uint256"
             }
         ],
-        "name": "MusicUploaded",
+        "name": "BatchMetadataUpdate",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "_tokenId",
+                "type": "uint256"
+            }
+        ],
+        "name": "MetadataUpdate",
         "type": "event"
     },
     {
@@ -182,32 +236,14 @@
             {
                 "indexed": true,
                 "internalType": "uint256",
-                "name": "musicReleaseId",
+                "name": "songId",
                 "type": "uint256"
-            },
-            {
-                "indexed": true,
-                "internalType": "address",
-                "name": "artist",
-                "type": "address"
             },
             {
                 "indexed": false,
                 "internalType": "uint256",
-                "name": "artistRevenue",
+                "name": "totalRevenue",
                 "type": "uint256"
-            },
-            {
-                "indexed": false,
-                "internalType": "address[]",
-                "name": "investors",
-                "type": "address[]"
-            },
-            {
-                "indexed": false,
-                "internalType": "uint256[]",
-                "name": "investorRevenues",
-                "type": "uint256[]"
             }
         ],
         "name": "RevenueDistributed",
@@ -219,23 +255,23 @@
             {
                 "indexed": true,
                 "internalType": "uint256",
-                "name": "musicReleaseId",
+                "name": "songId",
                 "type": "uint256"
             },
             {
                 "indexed": true,
                 "internalType": "address",
-                "name": "listener",
+                "name": "investor",
                 "type": "address"
             },
             {
                 "indexed": false,
                 "internalType": "uint256",
-                "name": "streamRevenue",
+                "name": "sharesBought",
                 "type": "uint256"
             }
         ],
-        "name": "SongStreamed",
+        "name": "SharePurchased",
         "type": "event"
     },
     {
@@ -244,374 +280,82 @@
             {
                 "indexed": true,
                 "internalType": "uint256",
-                "name": "musicReleaseId",
+                "name": "songId",
                 "type": "uint256"
             },
-            {
-                "components": [
-                    {
-                        "internalType": "uint256",
-                        "name": "baseStreamRate",
-                        "type": "uint256"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "subscriptionMultiplier",
-                        "type": "uint256"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "qualityMultiplier",
-                        "type": "uint256"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "listenerLocationMultiplier",
-                        "type": "uint256"
-                    }
-                ],
-                "indexed": false,
-                "internalType": "struct ThamaniStreamingPlatform.StreamRevenueConfig",
-                "name": "newConfig",
-                "type": "tuple"
-            }
-        ],
-        "name": "StreamRevenueConfigUpdated",
-        "type": "event"
-    },
-    {
-        "anonymous": false,
-        "inputs": [
             {
                 "indexed": true,
-                "internalType": "address",
-                "name": "user",
-                "type": "address"
-            },
-            {
-                "indexed": false,
-                "internalType": "enum ThamaniStreamingPlatform.SubscriptionTier",
-                "name": "tier",
-                "type": "uint8"
-            },
-            {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "startTimestamp",
-                "type": "uint256"
-            },
-            {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "expiryTimestamp",
-                "type": "uint256"
-            }
-        ],
-        "name": "SubscriptionPurchased",
-        "type": "event"
-    },
-    {
-        "anonymous": false,
-        "inputs": [
-            {
-                "indexed": false,
-                "internalType": "address",
-                "name": "firstPlace",
-                "type": "address"
-            },
-            {
-                "indexed": false,
-                "internalType": "address",
-                "name": "secondPlace",
-                "type": "address"
-            },
-            {
-                "indexed": false,
-                "internalType": "address",
-                "name": "thirdPlace",
-                "type": "address"
-            },
-            {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "firstPlaceReward",
-                "type": "uint256"
-            },
-            {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "secondPlaceReward",
-                "type": "uint256"
-            },
-            {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "thirdPlaceReward",
-                "type": "uint256"
-            }
-        ],
-        "name": "TopListenersRewarded",
-        "type": "event"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "_musicId",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_shareAmount",
-                "type": "uint256"
-            }
-        ],
-        "name": "buyMusicShares",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "_musicReleaseId",
-                "type": "uint256"
-            }
-        ],
-        "name": "distributeStreamingRevenue",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "distributeTopListenerRewards",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "getAllMusic",
-        "outputs": [
-            {
-                "components": [
-                    {
-                        "internalType": "uint256",
-                        "name": "id",
-                        "type": "uint256"
-                    },
-                    {
-                        "internalType": "address",
-                        "name": "artist",
-                        "type": "address"
-                    },
-                    {
-                        "internalType": "string",
-                        "name": "title",
-                        "type": "string"
-                    },
-                    {
-                        "internalType": "string",
-                        "name": "genre",
-                        "type": "string"
-                    },
-                    {
-                        "internalType": "string",
-                        "name": "ipfsHash",
-                        "type": "string"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "uploadTimestamp",
-                        "type": "uint256"
-                    },
-                    {
-                        "internalType": "uint16",
-                        "name": "uploadMonth",
-                        "type": "uint16"
-                    },
-                    {
-                        "internalType": "uint16",
-                        "name": "uploadYear",
-                        "type": "uint16"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "totalShares",
-                        "type": "uint256"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "sharePrice",
-                        "type": "uint256"
-                    }
-                ],
-                "internalType": "struct ThamaniStreamingPlatform.MusicMetadata[]",
-                "name": "",
-                "type": "tuple[]"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "_artist",
-                "type": "address"
-            }
-        ],
-        "name": "getMusicByArtist",
-        "outputs": [
-            {
-                "components": [
-                    {
-                        "internalType": "uint256",
-                        "name": "id",
-                        "type": "uint256"
-                    },
-                    {
-                        "internalType": "address",
-                        "name": "artist",
-                        "type": "address"
-                    },
-                    {
-                        "internalType": "string",
-                        "name": "title",
-                        "type": "string"
-                    },
-                    {
-                        "internalType": "string",
-                        "name": "genre",
-                        "type": "string"
-                    },
-                    {
-                        "internalType": "string",
-                        "name": "ipfsHash",
-                        "type": "string"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "uploadTimestamp",
-                        "type": "uint256"
-                    },
-                    {
-                        "internalType": "uint16",
-                        "name": "uploadMonth",
-                        "type": "uint16"
-                    },
-                    {
-                        "internalType": "uint16",
-                        "name": "uploadYear",
-                        "type": "uint16"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "totalShares",
-                        "type": "uint256"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "sharePrice",
-                        "type": "uint256"
-                    }
-                ],
-                "internalType": "struct ThamaniStreamingPlatform.MusicMetadata[]",
-                "name": "",
-                "type": "tuple[]"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "_musicId",
-                "type": "uint256"
-            }
-        ],
-        "name": "getMusicDetails",
-        "outputs": [
-            {
-                "internalType": "string",
-                "name": "title",
-                "type": "string"
-            },
-            {
-                "internalType": "string",
-                "name": "ipfsHash",
-                "type": "string"
-            },
-            {
                 "internalType": "address",
                 "name": "artist",
                 "type": "address"
             },
             {
+                "indexed": false,
+                "internalType": "string",
+                "name": "name",
+                "type": "string"
+            },
+            {
+                "indexed": false,
+                "internalType": "string",
+                "name": "genre",
+                "type": "string"
+            },
+            {
+                "indexed": false,
                 "internalType": "uint256",
                 "name": "totalShares",
                 "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "globalStreamRateConfig",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "baseStreamRate",
-                "type": "uint256"
             },
             {
+                "indexed": false,
                 "internalType": "uint256",
-                "name": "subscriptionMultiplier",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "qualityMultiplier",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "listenerLocationMultiplier",
+                "name": "sharePrice",
                 "type": "uint256"
             }
         ],
-        "stateMutability": "view",
-        "type": "function"
+        "name": "SongUploaded",
+        "type": "event"
     },
     {
-        "inputs": [],
-        "name": "listenerRewardsConfig",
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "from",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "to",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "internalType": "uint256",
+                "name": "tokenId",
+                "type": "uint256"
+            }
+        ],
+        "name": "Transfer",
+        "type": "event"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "allSongIds",
         "outputs": [
             {
                 "internalType": "uint256",
-                "name": "firstPlaceReward",
+                "name": "",
                 "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "secondPlaceReward",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "thirdPlaceReward",
-                "type": "uint256"
-            },
-            {
-                "internalType": "bool",
-                "name": "isEnabled",
-                "type": "bool"
             }
         ],
         "stateMutability": "view",
@@ -621,30 +365,29 @@
         "inputs": [
             {
                 "internalType": "address",
-                "name": "",
+                "name": "to",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "tokenId",
+                "type": "uint256"
+            }
+        ],
+        "name": "approve",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "owner",
                 "type": "address"
             }
         ],
-        "name": "listenerStreamCounts",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "enum ThamaniStreamingPlatform.SubscriptionTier",
-                "name": "",
-                "type": "uint8"
-            }
-        ],
-        "name": "maxMonthlyListeningMinutes",
+        "name": "balanceOf",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -659,21 +402,84 @@
         "inputs": [
             {
                 "internalType": "uint256",
-                "name": "",
+                "name": "_songId",
                 "type": "uint256"
             },
+            {
+                "internalType": "uint256",
+                "name": "_sharesCount",
+                "type": "uint256"
+            }
+        ],
+        "name": "buyShares",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_songId",
+                "type": "uint256"
+            }
+        ],
+        "name": "distributeRevenue",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "getAllSongIds",
+        "outputs": [
+            {
+                "internalType": "uint256[]",
+                "name": "",
+                "type": "uint256[]"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "tokenId",
+                "type": "uint256"
+            }
+        ],
+        "name": "getApproved",
+        "outputs": [
             {
                 "internalType": "address",
                 "name": "",
                 "type": "address"
             }
         ],
-        "name": "monthlyListenerStreamCounts",
-        "outputs": [
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
             {
                 "internalType": "uint256",
-                "name": "",
+                "name": "_songId",
                 "type": "uint256"
+            }
+        ],
+        "name": "getShareholders",
+        "outputs": [
+            {
+                "internalType": "address[]",
+                "name": "shareholders",
+                "type": "address[]"
+            },
+            {
+                "internalType": "uint256[]",
+                "name": "shares",
+                "type": "uint256[]"
             }
         ],
         "stateMutability": "view",
@@ -683,17 +489,12 @@
         "inputs": [
             {
                 "internalType": "uint256",
-                "name": "",
+                "name": "_songId",
                 "type": "uint256"
             }
         ],
-        "name": "musicCatalog",
+        "name": "getSongDetails",
         "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "id",
-                "type": "uint256"
-            },
             {
                 "internalType": "address",
                 "name": "artist",
@@ -701,7 +502,7 @@
             },
             {
                 "internalType": "string",
-                "name": "title",
+                "name": "name",
                 "type": "string"
             },
             {
@@ -711,23 +512,13 @@
             },
             {
                 "internalType": "string",
-                "name": "ipfsHash",
+                "name": "ipfsAudioHash",
                 "type": "string"
             },
             {
-                "internalType": "uint256",
-                "name": "uploadTimestamp",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint16",
-                "name": "uploadMonth",
-                "type": "uint16"
-            },
-            {
-                "internalType": "uint16",
-                "name": "uploadYear",
-                "type": "uint16"
+                "internalType": "string",
+                "name": "ipfsArtworkHash",
+                "type": "string"
             },
             {
                 "internalType": "uint256",
@@ -738,18 +529,10 @@
                 "internalType": "uint256",
                 "name": "sharePrice",
                 "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "musicCounter",
-        "outputs": [
+            },
             {
                 "internalType": "uint256",
-                "name": "",
+                "name": "releasedDate",
                 "type": "uint256"
             }
         ],
@@ -757,13 +540,24 @@
         "type": "function"
     },
     {
-        "inputs": [],
-        "name": "musicNFT",
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "owner",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "operator",
+                "type": "address"
+            }
+        ],
+        "name": "isApprovedForAll",
         "outputs": [
             {
-                "internalType": "contract MusicNFT",
+                "internalType": "bool",
                 "name": "",
-                "type": "address"
+                "type": "bool"
             }
         ],
         "stateMutability": "view",
@@ -777,27 +571,65 @@
                 "type": "uint256"
             }
         ],
-        "name": "musicReleaseStreamConfig",
+        "name": "musicTracks",
         "outputs": [
             {
+                "internalType": "address",
+                "name": "artist",
+                "type": "address"
+            },
+            {
+                "internalType": "string",
+                "name": "name",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "genre",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "ipfsAudioHash",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "ipfsArtworkHash",
+                "type": "string"
+            },
+            {
                 "internalType": "uint256",
-                "name": "baseStreamRate",
+                "name": "totalShares",
                 "type": "uint256"
             },
             {
                 "internalType": "uint256",
-                "name": "subscriptionMultiplier",
+                "name": "sharePrice",
                 "type": "uint256"
             },
             {
                 "internalType": "uint256",
-                "name": "qualityMultiplier",
+                "name": "releasedDate",
                 "type": "uint256"
             },
             {
                 "internalType": "uint256",
-                "name": "listenerLocationMultiplier",
+                "name": "totalRevenue",
                 "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "name",
+        "outputs": [
+            {
+                "internalType": "string",
+                "name": "",
+                "type": "string"
             }
         ],
         "stateMutability": "view",
@@ -817,29 +649,22 @@
         "type": "function"
     },
     {
-        "inputs": [],
-        "name": "platformToken",
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "tokenId",
+                "type": "uint256"
+            }
+        ],
+        "name": "ownerOf",
         "outputs": [
             {
-                "internalType": "contract Quiimo",
+                "internalType": "address",
                 "name": "",
                 "type": "address"
             }
         ],
         "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "enum ThamaniStreamingPlatform.SubscriptionTier",
-                "name": "_tier",
-                "type": "uint8"
-            }
-        ],
-        "name": "purchaseSubscription",
-        "outputs": [],
-        "stateMutability": "nonpayable",
         "type": "function"
     },
     {
@@ -852,27 +677,22 @@
     {
         "inputs": [
             {
-                "internalType": "uint256",
-                "name": "_baseStreamRate",
-                "type": "uint256"
+                "internalType": "address",
+                "name": "from",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "to",
+                "type": "address"
             },
             {
                 "internalType": "uint256",
-                "name": "_subscriptionMultiplier",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_qualityMultiplier",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_listenerLocationMultiplier",
+                "name": "tokenId",
                 "type": "uint256"
             }
         ],
-        "name": "setGlobalStreamRateConfig",
+        "name": "safeTransferFrom",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -880,27 +700,45 @@
     {
         "inputs": [
             {
-                "internalType": "uint256",
-                "name": "_firstPlaceReward",
-                "type": "uint256"
+                "internalType": "address",
+                "name": "from",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "to",
+                "type": "address"
             },
             {
                 "internalType": "uint256",
-                "name": "_secondPlaceReward",
+                "name": "tokenId",
                 "type": "uint256"
             },
             {
-                "internalType": "uint256",
-                "name": "_thirdPlaceReward",
-                "type": "uint256"
+                "internalType": "bytes",
+                "name": "data",
+                "type": "bytes"
+            }
+        ],
+        "name": "safeTransferFrom",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "operator",
+                "type": "address"
             },
             {
                 "internalType": "bool",
-                "name": "_isEnabled",
+                "name": "approved",
                 "type": "bool"
             }
         ],
-        "name": "setListenerRewardsConfig",
+        "name": "setApprovalForAll",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -908,55 +746,30 @@
     {
         "inputs": [
             {
-                "internalType": "uint256",
-                "name": "_musicReleaseId",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_platformShare",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_artistShare",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_investorShare",
-                "type": "uint256"
+                "internalType": "bytes4",
+                "name": "interfaceId",
+                "type": "bytes4"
             }
         ],
-        "name": "setRevenueShareConfig",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "name": "songRevenueShares",
+        "name": "supportsInterface",
         "outputs": [
             {
-                "internalType": "uint256",
-                "name": "platformShare",
-                "type": "uint256"
-            },
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "symbol",
+        "outputs": [
             {
-                "internalType": "uint256",
-                "name": "artistShare",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "investorShare",
-                "type": "uint256"
+                "internalType": "string",
+                "name": "",
+                "type": "string"
             }
         ],
         "stateMutability": "view",
@@ -966,16 +779,16 @@
         "inputs": [
             {
                 "internalType": "uint256",
-                "name": "",
+                "name": "tokenId",
                 "type": "uint256"
             }
         ],
-        "name": "songStreamRevenue",
+        "name": "tokenURI",
         "outputs": [
             {
-                "internalType": "uint256",
+                "internalType": "string",
                 "name": "",
-                "type": "uint256"
+                "type": "string"
             }
         ],
         "stateMutability": "view",
@@ -984,33 +797,24 @@
     {
         "inputs": [
             {
+                "internalType": "address",
+                "name": "from",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "to",
+                "type": "address"
+            },
+            {
                 "internalType": "uint256",
-                "name": "_musicReleaseId",
+                "name": "tokenId",
                 "type": "uint256"
             }
         ],
-        "name": "streamSong",
+        "name": "transferFrom",
         "outputs": [],
         "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "enum ThamaniStreamingPlatform.SubscriptionTier",
-                "name": "",
-                "type": "uint8"
-            }
-        ],
-        "name": "tierPrices",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
         "type": "function"
     },
     {
@@ -1030,17 +834,22 @@
         "inputs": [
             {
                 "internalType": "string",
-                "name": "_title",
-                "type": "string"
-            },
-            {
-                "internalType": "string",
-                "name": "_ipfsHash",
+                "name": "_name",
                 "type": "string"
             },
             {
                 "internalType": "string",
                 "name": "_genre",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "_ipfsAudioHash",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "_ipfsArtworkHash",
                 "type": "string"
             },
             {
@@ -1054,7 +863,7 @@
                 "type": "uint256"
             }
         ],
-        "name": "uploadMusic",
+        "name": "uploadSong",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -1066,37 +875,7 @@
         "type": "function"
     },
     {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "name": "userSubscriptions",
-        "outputs": [
-            {
-                "internalType": "enum ThamaniStreamingPlatform.SubscriptionTier",
-                "name": "tier",
-                "type": "uint8"
-            },
-            {
-                "internalType": "uint256",
-                "name": "startTimestamp",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "expiryTimestamp",
-                "type": "uint256"
-            },
-            {
-                "internalType": "bool",
-                "name": "isActive",
-                "type": "bool"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
+        "stateMutability": "payable",
+        "type": "receive"
     }
 ]
