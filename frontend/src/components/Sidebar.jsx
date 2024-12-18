@@ -11,7 +11,7 @@ import {
   LogOut,
 } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
-import Logo from "../assets/images/Logo.png"
+import Logo from "../assets/images/logo.png"
 
 const Sidebar = () => {
   const location = useLocation();
@@ -35,9 +35,10 @@ const Sidebar = () => {
   return (
     <div className="bg-white dark:bg-[#252727] dark:text-white dark:border-r border-r-slate-400 shadow-lg h-screen w-72">
       {/* Sidebar Header */}
-      <div className="flex items-center justify-center px-4  border-b">
-        <img src={Logo} alt="Quiimo Logo" className='w-40'/>
-      </div>
+      <div className="text-2xl font-bold text-[#04e3cb] flex items-center justify-center space-x-2">
+                <img src={Logo} alt="Quiimo Logo" className='w-16' />
+                 <span>Quiimo</span>
+               </div>
 
       {/* Main Menu */}
       <div className="mt-4">

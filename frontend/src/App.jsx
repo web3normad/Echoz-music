@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import {
   DynamicContextProvider,
   DynamicWidget,
-  mergeNetworks
+  mergeNetworks,
 } from "@dynamic-labs/sdk-react-core";
 import { DynamicWagmiConnector } from "@dynamic-labs/wagmi-connector";
 import { createConfig, WagmiProvider } from "wagmi";
@@ -13,13 +13,11 @@ import { mainnet } from "viem/chains";
 import { EthereumWalletConnectors } from "@dynamic-labs/ethereum";
 
 // Import Components
-import Navbar from "./components/Navbar";
-import Sidebar from "./components/Sidebar";
-
-// Theme Provider
-import { ThemeProvider } from './context/ThemeContext';
+import DashboardLayout from "./components/DashboardLayout";
+import { ThemeProvider } from "./context/ThemeContext";
 
 // Import Pages
+import LandingPage from "./pages/LandingPage";
 import MusicDashboard from "./pages/MusicDashboard";
 import Search from "./pages/Search";
 import Likes from "./pages/Likes";
@@ -39,84 +37,183 @@ import ExplorePage from "./pages/ExploreMusic";
 
 // Define Lisk Sepolia Network
 const liskSepoliaNetwork = {
-  blockExplorerUrls: ['https://sepolia-explorer.lisk.com/'],
+  blockExplorerUrls: ["https://sepolia-explorer.lisk.com/"],
   chainId: 4202,
-  chainName: 'Lisk Sepolia Testnet',
-  iconUrls: [], 
-  name: 'Lisk Sepolia',
+  chainName: "Lisk Sepolia Testnet",
+  iconUrls: [],
+  name: "Lisk Sepolia",
   nativeCurrency: {
     decimals: 18,
-    name: 'Sepolia ETH',
-    symbol: 'ETH',
-    iconUrl: '', // Optional icon URL for the currency
+    name: "Sepolia ETH",
+    symbol: "ETH",
+    iconUrl: "",
   },
   networkId: 4202,
-  rpcUrls: ['https://rpc.sepolia-api.lisk.com'],
-  vanityName: 'Lisk Sepolia',
+  rpcUrls: ["https://rpc.sepolia-api.lisk.com"],
+  vanityName: "Lisk Sepolia",
 };
 
-// Query Client and Wagmi Config
 const queryClient = new QueryClient();
 const config = createConfig({
   chains: [mainnet],
   multiInjectedProviderDiscovery: false,
   transports: {
     [mainnet.id]: http(),
-    [4202]: http('https://rpc.sepolia-api.lisk.com'), 
+    [4202]: http("https://rpc.sepolia-api.lisk.com"),
   },
 });
 
 export default function App() {
   return (
     <DynamicContextProvider
-    settings={{
-      environmentId: "417088c0-4493-4724-8927-ba502b6daf5d",
-      walletConnectors: [EthereumWalletConnectors],
-      overrides: {
-        // Option 1: Complete override
-        // evmNetworks: [liskSepoliaNetwork]
-        
-        // Option 2: Merge with existing networks
-        evmNetworks: (networks) => mergeNetworks([liskSepoliaNetwork], networks)
-      },
-    }}
-  >
+      settings={{
+        environmentId: "417088c0-4493-4724-8927-ba502b6daf5d",
+        walletConnectors: [EthereumWalletConnectors],
+        overrides: {
+          evmNetworks: (networks) => mergeNetworks([liskSepoliaNetwork], networks),
+        },
+      }}
+    >
       <WagmiProvider config={config}>
         <QueryClientProvider client={queryClient}>
           <DynamicWagmiConnector>
-          <ThemeProvider>
-            <Router>
-              <div className="flex dark:bg-[#131316] bg-[#fafafa]">
-                <Sidebar />
-                <div className="w-full dark:bg-[#131316] z-10">
-                  <Navbar />
-                  <main className="p-4 bg-gray-50 dark:bg-[#0F0F0F] overflow-y-hidden">
-                    <Routes>
-                      <Route path="/" element={<MusicDashboard />} />
-                      <Route path="/stream-music" element={<MusicDashboard />} />
-                      <Route path="/search" element={<Search />} />
-                      <Route path="/likes" element={<Likes />} />
-                      <Route path="/playlists" element={<Playlists />} />
-                      <Route path="/albums" element={<Albums />} />
-                      <Route path="/following" element={<Following />} />
-                      <Route path="/settings" element={<Settings />} />
-                      <Route path="/subscription" element={<Subscription />} />
-                      <Route path="/logout" element={<Logout />} />
-                      <Route path="/upload-music" element={<UploadMusic />} />
-                      <Route path="/revenue" element={<Revenue />} />
-                      <Route path="/investor" element={<InvestorDashboard />} />
-                      <Route path="/profile" element={<UserProfile />} />
-                      <Route
-                        path="/global-stream"
-                        element={<GlobalStreamRates />}
-                      />
-                      <Route path="/explore-music" element={<ExplorePage />} />
-                      <Route path="/artist" element={<Artist />} />
-                    </Routes>
-                  </main>
-                </div>
-              </div>
-            </Router>
+            <ThemeProvider>
+              <Router>
+                <Routes>
+                  {/* Landing Page */}
+                  <Route path="/" element={<LandingPage />} />
+
+                  {/* Dashboard Pages with Sidebar and Navbar */}
+                  <Route
+                    path="/stream-music"
+                    element={
+                      <DashboardLayout>
+                        <MusicDashboard />
+                      </DashboardLayout>
+                    }
+                  />
+                  <Route
+                    path="/search"
+                    element={
+                      <DashboardLayout>
+                        <Search />
+                      </DashboardLayout>
+                    }
+                  />
+                  <Route
+                    path="/likes"
+                    element={
+                      <DashboardLayout>
+                        <Likes />
+                      </DashboardLayout>
+                    }
+                  />
+                  <Route
+                    path="/playlists"
+                    element={
+                      <DashboardLayout>
+                        <Playlists />
+                      </DashboardLayout>
+                    }
+                  />
+                  <Route
+                    path="/albums"
+                    element={
+                      <DashboardLayout>
+                        <Albums />
+                      </DashboardLayout>
+                    }
+                  />
+                  <Route
+                    path="/following"
+                    element={
+                      <DashboardLayout>
+                        <Following />
+                      </DashboardLayout>
+                    }
+                  />
+                  <Route
+                    path="/settings"
+                    element={
+                      <DashboardLayout>
+                        <Settings />
+                      </DashboardLayout>
+                    }
+                  />
+                  <Route
+                    path="/subscription"
+                    element={
+                      <DashboardLayout>
+                        <Subscription />
+                      </DashboardLayout>
+                    }
+                  />
+                  <Route
+                    path="/logout"
+                    element={
+                      <DashboardLayout>
+                        <Logout />
+                      </DashboardLayout>
+                    }
+                  />
+                  <Route
+                    path="/upload-music"
+                    element={
+                      <DashboardLayout>
+                        <UploadMusic />
+                      </DashboardLayout>
+                    }
+                  />
+                  <Route
+                    path="/revenue"
+                    element={
+                      <DashboardLayout>
+                        <Revenue />
+                      </DashboardLayout>
+                    }
+                  />
+                  <Route
+                    path="/investor"
+                    element={
+                      <DashboardLayout>
+                        <InvestorDashboard />
+                      </DashboardLayout>
+                    }
+                  />
+                  <Route
+                    path="/profile"
+                    element={
+                      <DashboardLayout>
+                        <UserProfile />
+                      </DashboardLayout>
+                    }
+                  />
+                  <Route
+                    path="/global-stream"
+                    element={
+                      <DashboardLayout>
+                        <GlobalStreamRates />
+                      </DashboardLayout>
+                    }
+                  />
+                  <Route
+                    path="/explore-music"
+                    element={
+                      <DashboardLayout>
+                        <ExplorePage />
+                      </DashboardLayout>
+                    }
+                  />
+                  <Route
+                    path="/artist"
+                    element={
+                      <DashboardLayout>
+                        <Artist />
+                      </DashboardLayout>
+                    }
+                  />
+                </Routes>
+              </Router>
             </ThemeProvider>
           </DynamicWagmiConnector>
         </QueryClientProvider>
