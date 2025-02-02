@@ -67,7 +67,7 @@ export default function App() {
   return (
     <DynamicContextProvider
       settings={{
-        environmentId: "417088c0-4493-4724-8927-ba502b6daf5d",
+        environmentId: import.meta.env.VITE_ENVIRONMENT_ID,
         walletConnectors: [EthereumWalletConnectors],
         overrides: {
           evmNetworks: (networks) => mergeNetworks([liskSepoliaNetwork], networks),
