@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import { ChevronRight, Music, Coins, Share2, TrendingUp, Zap } from 'lucide-react';
-import Logo from "../assets/images/logo.png"
+import Logo from "../assets/images/echoz-logo.svg"
 import Imageone from "../assets/images/imagetwo.png"
 import { Link } from 'react-router-dom';
 
 const AnimatedButton = ({ children, className, ...props }) => (
   <button
     className={`
-      px-6 py-3 
-      rounded-xl 
+      px-6 py-2 
+      text-sm
+      rounded-full 
       font-semibold 
       transition-all 
       duration-300 
@@ -65,12 +66,12 @@ const LandingPage = () => {
     <div className="bg-[#111827] min-h-screen text-white">
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-[#1F2937] bg-opacity-90 backdrop-blur-md">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <div className="text-3xl font-bold text-[#04e3cb] flex items-center space-x-2">
-           <img src={Logo} alt="Quiimo Logo" className='w-16' />
-            <span>Quiimo</span>
+        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
+          <div className="text-xl font-bold text-[#04e3cb] flex items-center space-x-2">
+           <img src={Logo} alt="Quiimo Logo" className='w-10' />
+            <span>Echoz Music</span>
           </div>
-          <div className="space-x-6 flex items-center">
+          <div className="space-x-6 flex text-sm items-center">
             <a href="#" className="text-gray-300 hover:text-white transition-colors">Home</a>
             <a href="#" className="text-gray-300 hover:text-white transition-colors">About</a>
             <a href="#" className="text-gray-300 hover:text-white transition-colors">Services</a>
@@ -89,10 +90,10 @@ const LandingPage = () => {
       <div className="container mx-auto px-4 pt-40 pb-16 flex flex-col md:flex-row items-center">
         <div className="md:w-1/2 md:pr-12 text-center md:text-left">
           <h1 className="text-6xl font-extrabold mb-4 leading-tight">
-            Quiimo Music <br /> <span className="text-gray-400">Empowering Independent Artists</span>
+            Echoz Music <br /> <span className="text-gray-400">Empowering Independent Artists</span>
           </h1>
           <p className="text-lg text-gray-400 mb-8">
-            Quiimo Music is an on-chain music streaming platform designed to empower independent artists by helping them monetize their music.
+            Echoz Music is an on-chain music streaming platform designed to empower independent artists by helping them monetize their music.
           </p>
           <Link to="/stream-music">
           <AnimatedButton className="bg-[#04e3cb] text-black">
@@ -136,7 +137,7 @@ const LandingPage = () => {
       <div className="container mx-auto px-4 py-8 text-center">
         <h2 className="text-4xl font-bold mb-4 text-[#04e3cb]">A Unique Opportunity</h2>
         <p className="text-lg text-gray-400 mb-6">
-          Quiimo bridges the gap between artists and fans, creating a unique investment and engagement opportunity for everyone.
+          Echoz bridges the gap between artists and fans, creating a unique investment and engagement opportunity for everyone.
         </p>
         <div className="flex flex-col items-center">
           <div className="relative">
@@ -151,14 +152,14 @@ const LandingPage = () => {
 
       {/* Footer */}
       <footer className="bg-[#1F2937] py-12 text-center">
-        <div className="text-2xl font-bold text-[#04e3cb] mb-2">Quiimo</div>
+        <div className="text-2xl font-bold text-[#04e3cb] mb-2">Echoz</div>
         <p className="text-gray-400 mb-4">Empowering Artists, Engaging Fans</p>
         <div className="space-x-4">
           <a href="#" className="text-gray-300 hover:text-white">Privacy</a>
           <a href="#" className="text-gray-300 hover:text-white">Terms</a>
           <a href="#" className="text-gray-300 hover:text-white">Contact</a>
         </div>
-        <p className="text-gray-500 mt-4">&copy; 2024 Quiimo. All rights reserved.</p>
+        <p className="text-gray-500 mt-4">&copy; 2024 Echoz. All rights reserved.</p>
       </footer>
     </div>
   );

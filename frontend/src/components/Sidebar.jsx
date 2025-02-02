@@ -11,14 +11,14 @@ import {
   LogOut,
 } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
-import Logo from "../assets/images/logo.png"
+import Logo from "../assets/images/echoz-logo.svg"
 
 const Sidebar = () => {
   const location = useLocation();
 
   // Menu items configuration
   const menuItems = [
-    { label: 'Streaming', icon: Home, link: '/' },
+    { label: 'Streaming', icon: Home, link: '/stream-music' },
     { label: 'Explore Music', icon: Search, link: '/explore-music' },
     { label: 'Likes', icon: Heart, link: '/likes' },
     { label: 'Playlists', icon: ListMusic, link: '/playlists' },
@@ -35,9 +35,9 @@ const Sidebar = () => {
   return (
     <div className="bg-white dark:bg-[#252727] dark:text-white dark:border-r border-r-slate-400 shadow-lg h-screen w-72">
       {/* Sidebar Header */}
-      <div className="text-2xl font-bold text-[#04e3cb] flex items-center justify-center space-x-2">
-                <img src={Logo} alt="Quiimo Logo" className='w-16' />
-                 <span>Quiimo</span>
+      <div className="text-xl py-2  font-bold text-[#04e3cb] flex items-center justify-center space-x-2">
+                <img src={Logo} alt="Quiimo Logo" className='w-10' />
+                 <span>Echoz Music</span>
                </div>
 
       {/* Main Menu */}

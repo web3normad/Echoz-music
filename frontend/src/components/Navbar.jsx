@@ -43,7 +43,7 @@ const Navbar = () => {
   }, []);
 
   return (
-    <nav className="flex justify-between items-center bg-black text-white p-4 z-10">
+    <nav className="flex justify-between items-center bg-black text-white px-4 py-2 z-10">
       {/* Search Bar */}
       <div className="flex-grow max-w-lg">
         <input

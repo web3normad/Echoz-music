@@ -180,13 +180,13 @@ const MusicStreamPage = () => {
   }
 
   return (
-    <div className="bg-[#121212] min-h-screen p-32 text-white flex">
-      <div className="flex-1 bg-[#121212] p-6 overflow-y-auto">
+    <div className="bg-[#121212] min-h-screen p-16 text-white flex">
+      <div className="flex-1 bg-[#121212] px-6 overflow-y-auto">
         {/* Listen Now Heading */}
-        <h1 className="text-3xl font-bold mb-8">Listen Now</h1>
+        <h1 className="text-2xl font-bold mb-8">Listen Now</h1>
 
         {/* Main Content */}
-        <div className="flex-1 bg-[#121212] p-6 overflow-y-auto">
+        <div className="flex-1 bg-[#121212] px-2 overflow-y-auto">
           {/* Track Grid */}
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8">
             {uploadedTracks.length > 0 ? (
@@ -226,7 +226,7 @@ const MusicStreamPage = () => {
 
           {/* Player Controls */}
           {currentTrack && (
-            <div className="fixed bottom-0 w-[86%] left-42 right-0 bg-[#181818] p-2">
+            <div className="fixed bottom-0 w-[83.6%] left-42 right-0 bg-[#181818] p-2">
               <div className="max-w-6xl mx-auto">
                 {/* Current Track Info */}
                 <div className="flex items-center mb-2">
